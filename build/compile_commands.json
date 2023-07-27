@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/necro/Desktop/dev/build",
+  "command": "/usr/bin/c++  -isystem /usr/include/opencv4 -g -o CMakeFiles/DisplayImage.dir/src/main.cpp.o -c /home/necro/Desktop/dev/src/main.cpp",
+  "file": "/home/necro/Desktop/dev/src/main.cpp"
+}
+]
