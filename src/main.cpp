@@ -19,16 +19,16 @@ float SIGMA = 75;
 int DIFF_EFFECT = 5;
 int COLOR_EFFECT = 0;
 int DELIMITIER = DIFF_EFFECT + COLOR_EFFECT;
-int KERNEL_SIZE = 11;
+int KERNEL_SIZE = 5;
 float SMALL_NUMBER = 0.00000000001;
 
 int main(int argc, char const *argv[])
 {
     Mat image = imread("./inpimage.png", IMREAD_COLOR);
     Mat dst = image.clone();
-    Mat kernel = Mat::ones(KERNEL_SIZE, KERNEL_SIZE, CV_32F);
+    Mat kernel = Mat::ones(KERNEL_SIZE, KERNEL_SIZE, CV_32FC1);
     distance_kernel(kernel, KERNEL_SIZE);
-    // cout << kernel << endl;
+    cout << kernel << endl;
     bilateral_filter(image, dst, kernel, KERNEL_SIZE);
     // filter2D(image, dst, -1, kernel);
     // imshow("new_image", dst);
@@ -60,27 +60,49 @@ void distance_kernel(Mat &kernel, int kernel_size)
             kernel.at<float>(i, j) = gauss_distance;
         }
     }
+    cout << kernel << endl;
 }
 
-// void color_kernel(Mat &src, Mat &kernel, int kernel_size, Point main_point)
-// {
-//     Vec3b main_color = src.at<Vec3b>(main_point);
-//     int half_kernel = kernel_size / 2;
+void color_kernel(Mat &src, Mat &kernel, int kernel_size, Point main_point)
+{
+    float r, g, b;
+    float m_r, m_g, m_b;
+    float color_diff, gauss_distance;
+    float w = 0;
+    int main = kernel_size / 2;
 
-//     for (int i = -1 * half_kernel; i <= half_kernel; i++)
-//     {
-//         for (int j = 0; j < kernel.rows; j++)
-//         {
-//             // gauss : e^((x2-x1)^2+...)/sigma)
-//             power_g = (pow(i - mid, 2) + pow(j - mid, 2)) / (2 * pow(SIGMA, 2));
+    Vec3b real_color = src.at<Vec3b>(main_point);
+    Vec3b other_color;
+    m_r = real_color[0];
+    m_g = real_color[1];
+    m_b = real_color[2];
+    for (int i = -1 * main; i <= main; i++)
+    {
+        for (int j = -1 * main; j <= main; j++)
+        {
+            if (j + main_point.y < 0 || j + main_point.y >= src.cols || i + main_point.x < 0 || i + main_point.x >= src.rows)
+            {
+            }
+            else
+            {
+                Vec3b other_color = src.at<Vec3b>(main_point.x + i, main_point.y + j);
+                r = other_color[0];
+                g = other_color[1];
+                b = other_color[2];
 
-//             gauss_distance = exp(-1 * power_g);
-//             // float oklidian_distance = sqrt(pow(i - mid, 2) + pow(j - mid, 2));
-//             kernel.at<float>(i, j) = gauss_distance * DIFF_EFFECT;
-//             w += gauss_distance;
-//         }
-//     }
-// }
+                color_diff = (pow(r - m_r, 2) + pow(g - m_g, 2) + pow(b - m_b, 2)) / (2 * pow(100, 2));
+
+                gauss_distance = exp(-1 * color_diff);
+
+                // float oklidian_distance = sqrt(pow(i - mid, 2) + pow(j - mid, 2));
+                // cout << gauss_distance << "r " << r << "g " << g << "b " << b << "mr " << m_r << "mg " << m_g << "mb " << m_b << endl;
+                kernel.at<float>(i + main, j + main) = gauss_distance;
+                // w += gauss_distance;
+            }
+        }
+    }
+    // cout << kernel << endl;
+}
 
 float kernel_summer(Mat &kernel, int kernel_size)
 {
@@ -127,6 +149,8 @@ void bilateral_filter(Mat &src, Mat &dst, Mat &kernel, int kernel_size)
 {
     // 5- 4* (sums/765)
     Mat dst_kernel = kernel.clone();
+    Mat clr_kernel = kernel.clone();
+
     cout << kernel << endl;
     int main = kernel_size / 2;
     int x, y;
@@ -135,7 +159,9 @@ void bilateral_filter(Mat &src, Mat &dst, Mat &kernel, int kernel_size)
     {
         for (int j = 0; j < src.rows; j++)
         {
-            // kernel_fixer(src, kernel, dst_kernel, kernel_size, i, j);
+            color_kernel(src, clr_kernel, kernel_size, Point(i, j));
+            // cout << "ex: " << kernel << endl;
+            dst *= clr_kernel;
             // cout << kernel << endl;
             vector<int> tot = vector({0, 0, 0});
             float divider = 0;
