@@ -1,4 +1,4 @@
-# Install script for directory: /home/necro/Desktop/dev
+# Install script for directory: /home/hikmetli/opencv_filters
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/necro/Desktop/dev/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/hikmetli/opencv_filters/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,5 +1,5 @@
 CMakeFiles/DisplayImage.dir/src/main.cpp.o: \
- /home/necro/Desktop/dev/src/main.cpp /usr/include/stdc-predef.h \
+ /home/hikmetli/opencv_filters/src/main.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

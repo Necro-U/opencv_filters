@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/necro/Desktop/dev/build",
-		"source" : "/home/necro/Desktop/dev"
+		"build" : "/home/hikmetli/opencv_filters/build",
+		"source" : "/home/hikmetli/opencv_filters"
 	},
 	"version" : 
 	{
