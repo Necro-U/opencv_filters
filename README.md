@@ -20,7 +20,7 @@ Second one might be unnecessary. Now you are ready! Let's build and execute.
 ## Build and Execute
 Be sure about that you are in the project base path. Your path need to be like '.../opencv_filters'. Then execute 
 
-````
+```
     cmake -B ./build/
     make -C ./build/
 ```
