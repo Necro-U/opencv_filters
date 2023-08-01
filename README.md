@@ -1,5 +1,5 @@
 # About
-The project is about making image filters by using opencv.
+The project is about making image filters by using opencv. There will be a menu for filters that project has. By using menu you can use filters by changing necessary values
 ## Reqirements
 At debian based linux first you need to do :
 ```
