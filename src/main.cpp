@@ -18,6 +18,7 @@ float mat_summer(Mat &matrix1, int kernel_size);
 void unsharper(Mat &kernel, int kernel_size, int sigma);
 void box(Mat &kernel, int kernel_size);
 void menu(Mat &src, Mat &dst);
+void call_all_features(Mat &src, Mat kernel, int kernel_size, int sigma);
 
 float SIGMA = 75;
 int KERNEL_SIZE = 5;
@@ -58,8 +59,9 @@ void kernel_size_changer()
 
 void menu(Mat &src, Mat &dst)
 {
-    vector<String> filters = {"Gaussian", "Ridge", "Box-Blur", "Unsharping", "Bilateral"};
+    vector<String> filters = {"Gaussian", "Ridge", "Box-Blur", "Unsharping", "Bilateral", "ALL FEATURES"};
     // Mat kernel = Mat::ones()
+    int shower = 1;
     cout << "Welcome!\nWhich type of filter do you want to try?" << endl;
     for (int i = 0; i < filters.size(); i++)
     {
@@ -96,12 +98,49 @@ void menu(Mat &src, Mat &dst)
         bilateral_filter(src, dst, kernel, KERNEL_SIZE);
         break;
 
+    case 6:
+        call_all_features(src, kernel, KERNEL_SIZE, SIGMA);
+        shower = 0;
+        break;
     default:
         cout << "Please Enter a Valid number" << endl;
+        shower = 0;
         break;
     }
-    imshow("new_image", dst);
-    imshow("ex_image", src);
+
+    if (shower)
+    {
+        imshow("new_image", dst);
+        imshow("ex_image", src);
+        waitKey(0);
+        destroyAllWindows();
+    }
+}
+void call_all_features(Mat &src, Mat kernel, int kernel_size, int sigma)
+{
+    Mat dst1 = src.clone();
+    Mat dst2 = src.clone();
+    Mat dst3 = src.clone();
+    Mat dst4 = src.clone();
+    Mat dst5 = src.clone();
+
+    sigma_changer();
+    gaussian_blur(kernel, KERNEL_SIZE, SIGMA);
+    filter2D(src, dst1, -1, kernel);
+    ridge_edge_kernel_creator(kernel, 0);
+    filter2D(src, dst2, -1, kernel);
+    box(kernel, KERNEL_SIZE);
+    filter2D(src, dst3, -1, kernel);
+    unsharper(kernel, KERNEL_SIZE, SIGMA);
+    filter2D(src, dst4, -1, kernel);
+    bilateral_filter(src, dst5, kernel, KERNEL_SIZE);
+
+    imshow("gauss_blur", dst1);
+    imshow("ridge", dst2);
+    imshow("box", dst3);
+    imshow("unsharper", dst4);
+    imshow("bilateral", dst5);
+
     waitKey(0);
     destroyAllWindows();
 }
